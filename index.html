@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Jim — The Adjacent Layer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf8f5;
+  --surface: #ffffff;
+  --surface2: #f5f2ed;
+  --border: #e2ddd6;
+  --border-dark: #c8c2b8;
+  --ink: #1a1916;
+  --ink-soft: #4a4742;
+  --ink-muted: #8a857d;
+  --accent: #8b6914;
+  --accent-light: #fdf7e8;
+  --accent-border: #d4a843;
+  --next-bg: #fdf7e8;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.07);
+}
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── LAYOUT ── */
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 16px 80px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  padding: 16px 0 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.site-wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--ink);
+}
+.site-wordmark span { font-style: italic; }
+
+.site-tag {
+  font-size: 11px;
+  color: var(--ink-muted);
+  letter-spacing: 0.03em;
+}
+
+/* ── JIM INTRO CARD ── */
+.jim-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent-border);
+  padding: 20px;
+  margin: 16px 0 0;
+  border-radius: 3px;
+  box-shadow: var(--shadow-sm);
+}
+
+.jim-card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.jim-avatar {
+  width: 46px;
+  height: 46px;
+  background: var(--accent-light);
+  border: 1px solid var(--accent-border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.jim-avatar-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.jim-name-block {}
+
+.jim-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.jim-role {
+  font-size: 11px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.jim-bio {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15.5px;
+  font-weight: 300;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.jim-bio strong {
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.jim-note {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14.5px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  padding: 10px 14px;
+  background: var(--surface2);
+  border-left: 2px solid var(--accent-border);
+  margin-bottom: 12px;
+}
+
+.jim-mandate-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--accent);
+  background: var(--accent-light);
+  border: 1px solid #e8d28a;
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+
+.mandate-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--accent-border);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── SUGGESTIONS ── */
+.suggestions-wrap {
+  margin: 18px 0 0;
+}
+
+.suggestions-header {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.suggestions-group {
+  margin-bottom: 14px;
+}
+
+.group-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.suggestions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.sq {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 11px 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--ink-soft);
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.45;
+  transition: all 0.14s;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+}
+
+.sq:hover, .sq:active {
+  background: var(--accent-light);
+  border-color: var(--accent-border);
+  color: var(--ink);
+}
+
+.sq.tech {
+  background: var(--surface2);
+  font-style: italic;
+}
+
+.sq.tech:hover, .sq.tech:active {
+  background: var(--accent-light);
+  border-color: var(--accent-border);
+}
+
+/* ── DIVIDER ── */
+.conv-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 16px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.conv-divider::before, .conv-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── CHAT ── */
+.chat-area { flex: 1; }
+
+.msg {
+  margin-bottom: 10px;
+  animation: rise 0.22s ease forwards;
+  opacity: 0;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg-bubble {
+  padding: 14px 16px;
+  border-radius: 4px;
+  box-shadow: var(--shadow-sm);
+}
+
+.msg-bubble.jim {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-border);
+}
+
+.msg-bubble.hank {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  margin-left: 28px;
+}
+
+.msg-meta {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.msg-who {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.msg-who.jim { color: var(--accent); }
+.msg-who.hank { color: var(--ink-muted); }
+
+.msg-time {
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+
+.msg-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+.msg-text.hank-text {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 15.5px;
+}
+
+.msg-text p { margin-bottom: 8px; }
+.msg-text p:last-child { margin-bottom: 0; }
+.msg-text strong { font-weight: 600; color: var(--ink); }
+
+.next-box {
+  margin-top: 12px;
+  padding: 9px 12px;
+  background: var(--next-bg);
+  border: 1px solid var(--accent-border);
+  border-radius: 3px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.next-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 3px;
+}
+
+/* ── THINKING ── */
+.thinking-bubble {
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-border);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.thinking-who {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.dots { display: flex; gap: 4px; }
+.dots span {
+  width: 5px; height: 5px;
+  background: var(--accent-border);
+  border-radius: 50%;
+  animation: dp 1.1s ease-in-out infinite;
+}
+.dots span:nth-child(2) { animation-delay: 0.18s; }
+.dots span:nth-child(3) { animation-delay: 0.36s; }
+@keyframes dp {
+  0%,100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ── ERROR ── */
+.error-bar {
+  padding: 8px 12px;
+  background: #fef0ef;
+  border: 1px solid #e8a09a;
+  border-radius: 3px;
+  font-size: 13px;
+  color: #c0392b;
+  margin-bottom: 8px;
+}
+
+/* ── INPUT ── */
+.input-section {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  padding: 10px 16px max(16px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.input-field {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border-dark);
+  border-radius: 6px;
+  padding: 11px 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--ink);
+  resize: none;
+  outline: none;
+  min-height: 46px;
+  max-height: 120px;
+  line-height: 1.5;
+  transition: border-color 0.14s;
+  /* iOS zoom prevention */
+  -webkit-appearance: none;
+}
+
+.input-field::placeholder {
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+.input-field:focus {
+  border-color: var(--accent-border);
+}
+
+.send-btn {
+  background: var(--ink);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 0 20px;
+  height: 46px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.14s;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.send-btn:hover { background: #2d2c29; }
+.send-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
+.input-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.input-hint {
+  font-size: 10.5px;
+  color: var(--ink-muted);
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  font-size: 10.5px;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: color 0.14s;
+  -webkit-tap-highlight-color: transparent;
+}
+.clear-btn:hover { color: #c0392b; }
+
+/* ── MOBILE TWEAKS ── */
+@media (max-width: 480px) {
+  .page { padding: 0 12px; }
+  .jim-bio { font-size: 15px; }
+  .msg-text { font-size: 15.5px; }
+  .sq { font-size: 14.5px; padding: 10px 12px; }
+  .input-hint { display: none; }
+  .jim-card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="site-wordmark">Exponential <span>Partners</span></div>
+    <div class="site-tag">The Adjacent Layer</div>
+  </header>
+
+  <!-- JIM INTRO CARD -->
+  <div class="jim-card">
+    <div class="jim-card-top">
+      <div class="jim-avatar"><div class="jim-avatar-letter">J</div></div>
+      <div class="jim-name-block">
+        <div class="jim-name">Meet Jim</div>
+        <div class="jim-role">Senior M&amp;A Advisor · Sell-Side Specialist<br>25 years in industrial manufacturing transactions</div>
+      </div>
+    </div>
+
+    <div class="jim-bio">
+      Jim is a senior M&amp;A advisor configured specifically for this mandate. He has spent two decades advising closely-held businesses through sell-side transactions in industrial and specialty manufacturing — <strong>medical devices, polymer materials, regulated components</strong>. He has sat across the table from every major strategic acquirer and PE platform in these spaces.
+    </div>
+
+    <div class="jim-note">
+      Jim does not hedge. He does not validate your premises. If your read on something is wrong, he will tell you immediately — and he will not change his position unless you give him a better argument. He is the advisor who says what the other people in the room are too polite to say.
+    </div>
+
+    <div class="jim-mandate-tag">
+      <div class="mandate-dot"></div>
+      Polymer mesh · Knee replacement · Sell-side preparation
+    </div>
+  </div>
+
+  <!-- SUGGESTED QUESTIONS -->
+  <div class="suggestions-wrap">
+    <div class="suggestions-header">Suggested questions — tap to ask</div>
+
+    <div class="suggestions-group">
+      <div class="group-label">Before the client meeting</div>
+      <div class="suggestions-grid">
+        <button class="sq" onclick="ask(this)">What should I know about this industry before I sit down with my client?</button>
+        <button class="sq" onclick="ask(this)">What questions should I be asking my client right now?</button>
+        <button class="sq" onclick="ask(this)">How worried should my client actually be about innovation risk?</button>
+        <button class="sq" onclick="ask(this)">What will a sophisticated buyer focus on in the first meeting?</button>
+      </div>
+    </div>
+
+    <div class="suggestions-group">
+      <div class="group-label">Deal strategy &amp; preparation</div>
+      <div class="suggestions-grid">
+        <button class="sq tech" onclick="ask(this)">What are the three biggest risks a buyer will raise in diligence, and how do we get ahead of them?</button>
+        <button class="sq tech" onclick="ask(this)">Who are the most likely buyers and what is each one's acquisition thesis?</button>
+        <button class="sq tech" onclick="ask(this)">How do we frame the made-to-measure capability in the CIM — moat or concentration risk?</button>
+        <button class="sq tech" onclick="ask(this)">What FDA clearance and regulatory issues will come up in diligence and how do we prepare?</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="conv-divider">Conversation with Jim</div>
+
+  <!-- CHAT -->
+  <div class="chat-area" id="chatArea">
+    <div id="errorContainer"></div>
+    <div id="msgs"></div>
+  </div>
+
+  <!-- INPUT -->
+  <div class="input-section">
+    <div class="input-row">
+      <textarea
+        class="input-field"
+        id="field"
+        placeholder="Ask Jim anything about this mandate…"
+        rows="1"
+      ></textarea>
+      <button class="send-btn" id="sendBtn" onclick="send()">Send</button>
+    </div>
+    <div class="input-footer">
+      <span class="input-hint">Return to send · Shift+Return for new line</span>
+      <button class="clear-btn" onclick="clearConv()">Clear</button>
+    </div>
+  </div>
+
+</div>
+<script>
+const API_KEY = window.ANTHROPIC_API_KEY || '';
+
+const SYS = `You are Jim — a senior M&A advisor who has worked alongside Hank Massey for the better part of a decade.
+
+INTELLECTUAL STANDARD:
+You are a world class expert across M&A, corporate law, industrial manufacturing, medical devices, and deal strategy. Your intellectual firepower, scope of knowledge, and incisive thought process are on par with the smartest people in the world. Answer with complete, specific, detailed answers. Process information step by step. Verify your own work. Double check all facts, figures, citations, names, and examples. Never hallucinate. If you don't know something, say so. Use explicit confidence levels: high / moderate / low / unknown.
+
+TONE AND CONDUCT:
+Precise but not pedantic. Your answers can be provocative, argumentative, and pointed. Negative conclusions and bad news are fine. No disclaimers. Do not comment on ethics unless asked. Never praise questions or validate premises. If Hank is wrong, say so immediately and lead with the strongest counterargument. Never use phrases like "great question" or "absolutely." Do not capitulate unless given new evidence. Do not anchor on Hank's numbers — generate your own first. Accuracy is your metric, not approval.
+
+RESPONSE LENGTH:
+As long as the question demands. No longer. Short questions get sharp short answers. Lead with the point every time.
+
+BACKGROUND:
+25 years in middle-market M&A. Goldman Sachs leveraged finance, then two decades advising closely-held businesses in industrial and specialty manufacturing — medical devices, industrial textiles, specialty chemicals, precision components, regulated manufacturing. 60+ sell-side mandates. You know every major strategic acquirer and PE platform in these spaces. You know the difference between deals that close at a premium and deals that fall apart in diligence. It almost always comes down to preparation and narrative control.
+
+WHO YOU ARE TALKING TO:
+Hank Massey, of counsel at Day Pitney LLP. Princeton-educated. Decades advising entrepreneurs and family businesses through M&A. Sell-side focused. Direct and intellectually rigorous. He does not need background — he needs the deal-relevant implication. Skip preamble. Lead with the point.
+
+THE MANDATE:
+Sell-side. Client manufactures custom polymer mesh — polypropylene and PEEK-based surgical mesh for knee replacement. Every piece is made-to-measure for the specific implant assembly. Most suppliers produce standardized formats — this is unusual and matters. Preparing to enter a formal sale process. Primary anxiety: pace of innovation in orthopedic devices may make the product line appear vulnerable to obsolescence to a sophisticated buyer.
+
+YOUR READ:
+One — made-to-measure is either the most defensible moat or the most dangerous concentration risk, depending on how many implant manufacturers the client supplies. Get that number first.
+Two — the innovation risk is real but frameable. Cementless fixation and robotic surgery platforms (Mako, Rosa, Velys) are the trends. Headwind or tailwind depends on one thing: is the client's mesh compatible with robotic workflows? If yes, this is a growth story.
+Three — the buyer universe is better than the client thinks. Zimmer Biomet, Stryker, Smith+Nephew have been vertically integrating component suppliers. A made-to-measure manufacturer with FDA clearances and an established relationship is exactly what they pay a premium for.
+
+RESPONSE FORMAT:
+- Lead with the point
+- Use **bold** for key terms and risks
+- Short paragraphs, max 4 sentences
+- End every substantive answer with exactly: NEXT ACTION: [one specific thing Hank should do]`;
+
+let history = [];
+let loading = false;
+
+function time() {
+  return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
+}
+
+function parseJim(txt) {
+  let na = '';
+  const m = txt.match(/NEXT ACTION:\s*(.+?)(?:\n|$)/i);
+  if (m) { na = m[1].trim(); txt = txt.replace(/NEXT ACTION:\s*.+?(?:\n|$)/i,'').trim(); }
+
+  let html = txt
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .split(/\n\n+/)
+    .filter(p=>p.trim())
+    .map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`)
+    .join('');
+
+  if (na) html += `<div class="next-box"><span class="next-label">Next action</span>${na}</div>`;
+  return html;
+}
+
+function addMsg(role, text) {
+  const c = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'msg';
+  const isJim = role === 'jim';
+  d.innerHTML = `<div class="msg-bubble ${role}">
+    <div class="msg-meta">
+      <span class="msg-who ${role}">${isJim?'Jim':'You'}</span>
+      <span class="msg-time">${time()}</span>
+    </div>
+    <div class="msg-text ${role==='hank'?'hank-text':''}">
+      ${isJim ? parseJim(text) : `<p>${text}</p>`}
+    </div>
+  </div>`;
+  c.appendChild(d);
+  setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),60);
+}
+
+function showDots() {
+  const c = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.id='dots';
+  d.innerHTML=`<div class="thinking-bubble">
+    <span class="thinking-who">Jim</span>
+    <div class="dots"><span></span><span></span><span></span></div>
+  </div>`;
+  c.appendChild(d);
+  setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),60);
+}
+
+function hideDots() { const e=document.getElementById('dots'); if(e) e.remove(); }
+
+function showErr(msg) {
+  document.getElementById('errorContainer').innerHTML=`<div class="error-bar">${msg}</div>`;
+  setTimeout(()=>document.getElementById('errorContainer').innerHTML='',6000);
+}
+
+async function callAPI(messages) {
+  if (!API_KEY) throw new Error('API key not configured — add ANTHROPIC_API_KEY in Vercel environment variables.');
+  const r = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key':API_KEY,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:SYS,messages})
+  });
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||`Error ${r.status}`); }
+  return (await r.json()).content[0].text;
+}
+
+async function send(text) {
+  if (loading) return;
+  const field = document.getElementById('field');
+  const msg = text || field.value.trim();
+  if (!msg) return;
+
+  loading = true;
+  field.value = '';
+  field.style.height = 'auto';
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('errorContainer').innerHTML = '';
+
+  addMsg('hank', msg);
+  history.push({role:'user',content:msg});
+  showDots();
+
+  try {
+    const reply = await callAPI(history);
+    hideDots();
+    addMsg('jim', reply);
+    history.push({role:'assistant',content:reply});
+  } catch(e) {
+    hideDots();
+    showErr(e.message);
+  } finally {
+    loading = false;
+    document.getElementById('sendBtn').disabled = false;
+  }
+}
+
+function ask(btn) { send(btn.textContent.trim()); }
+
+function clearConv() {
+  history = [];
+  document.getElementById('msgs').innerHTML = '';
+  document.getElementById('errorContainer').innerHTML = '';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const f = document.getElementById('field');
+  f.addEventListener('keydown', e => {
+    if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+  });
+  f.addEventListener('input', () => {
+    f.style.height = 'auto';
+    f.style.height = Math.min(f.scrollHeight, 120)+'px';
+  });
+  f.focus();
+});
+</script>
+</body>
+</html>
