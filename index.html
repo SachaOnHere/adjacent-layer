@@ -580,7 +580,7 @@ body {
 
 </div>
 <script>
-const API_KEY = window.ANTHROPIC_API_KEY || '';
+const API_KEY = ''; // Key is handled server-side
 
 const SYS = `You are Jim — a senior M&A advisor who has worked alongside Hank Massey for the better part of a decade.
 
@@ -674,18 +674,17 @@ function showErr(msg) {
 }
 
 async function callAPI(messages) {
-  if (!API_KEY) throw new Error('API key not configured — add ANTHROPIC_API_KEY in Vercel environment variables.');
-  const r = await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':API_KEY,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1500,system:SYS,messages})
+  const r = await fetch('/api/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1500,
+      system: SYS,
+      messages
+    })
   });
-  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||`Error ${r.status}`); }
+  if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.error?.message || `Error ${r.status}`); }
   return (await r.json()).content[0].text;
 }
 
